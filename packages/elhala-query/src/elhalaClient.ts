@@ -13,7 +13,7 @@ export class ElhalaClient {
     if (this.queries.has(queryHash)) {
       return this.queries.get(queryHash) as Query<T>;
     } else {
-      let query = createQuery(options);
+      let query = createQuery(this, options);
       this.queries.set(queryHash, query);
 
       return query;
@@ -30,5 +30,9 @@ export class ElhalaClient {
       ...state,
       data: data,
     }));
+  }
+
+  removeQuery(query: Query<any>) {
+    this.queries.delete(query.options.queryHash);
   }
 }

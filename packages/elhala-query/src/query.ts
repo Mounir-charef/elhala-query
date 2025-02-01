@@ -1,9 +1,12 @@
+import { ElhalaClient } from "./elhalaClient";
 import { Query, QueryOptions } from "./types";
 
-export function createQuery<T>({
-  queryFn,
-  queryKey,
-}: QueryOptions<T>): Query<T> {
+const DEFAULT_CACHE_TIME = 1000 * 60 * 5;
+
+export function createQuery<T>(
+  client: ElhalaClient,
+  { queryFn, queryKey, cacheTime = DEFAULT_CACHE_TIME }: QueryOptions<T>
+): Query<T> {
   let queryHash = JSON.stringify(queryKey);
 
   let query: Query<T> = {
@@ -22,15 +25,34 @@ export function createQuery<T>({
       queryHash: queryHash,
       queryKey: queryKey,
     },
+    gcTimeout: undefined,
+
+    scheduleGC: () => {
+      query.gcTimeout = setTimeout(() => {
+        client.removeQuery(query);
+      }, cacheTime);
+    },
+
+    unscheduleGC: () => {
+      clearTimeout(query.gcTimeout);
+    },
+
     subscribe: (subscriber) => {
       query.subscribers.push(subscriber);
+
+      query.unscheduleGC();
 
       return () => {
         query.subscribers = query.subscribers.filter(
           (sub) => sub !== subscriber
         );
+
+        if (query.subscribers.length === 0) {
+          query.scheduleGC();
+        }
       };
     },
+
     setState: (updater) => {
       query.state = updater(query.state);
 

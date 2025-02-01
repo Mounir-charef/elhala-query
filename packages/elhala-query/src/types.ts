@@ -5,6 +5,7 @@ export type QueryStatus = "idle" | "loading" | "success" | "error";
 export type QueryOptions<T> = {
   queryKey: QueryKey;
   queryFn: ({ queryKey }: { queryKey: QueryKey }) => Promise<T>;
+  cacheTime?: number;
 };
 export type useQueryOptions<T> = QueryOptions<T> & {
   staleTime?: number;
@@ -29,9 +30,12 @@ export type Query<T> = {
     queryHash: string;
   };
   promise?: Promise<void>;
+  gcTimeout?: NodeJS.Timeout;
   subscribe: (subscriber: QuerySubcriber) => () => void;
   setState: (updater: (state: QueryState<T>) => QueryState<T>) => void;
   fetch: () => void;
+  scheduleGC: () => void;
+  unscheduleGC: () => void;
 };
 
 export type QueryObserver<T> = {
