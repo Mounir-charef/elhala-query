@@ -30,7 +30,7 @@ export type Query<T> = {
     queryHash: string;
   };
   promise?: Promise<void>;
-  gcTimeout?: NodeJS.Timeout;
+  gcTimeout?: ReturnType<typeof setTimeout>;
   subscribe: (subscriber: QuerySubcriber) => () => void;
   setState: (updater: (state: QueryState<T>) => QueryState<T>) => void;
   fetch: () => void;
