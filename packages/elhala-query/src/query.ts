@@ -3,7 +3,6 @@ import { Query, QueryOptions } from "./types";
 export function createQuery<T>({
   queryFn,
   queryKey,
-  staleTime,
 }: QueryOptions<T>): Query<T> {
   let queryHash = JSON.stringify(queryKey);
 
@@ -15,13 +14,13 @@ export function createQuery<T>({
       isLoading: true,
       isFetching: true,
       status: "loading",
+      lastUpdated: undefined,
     },
     promise: undefined,
     options: {
       queryFn: queryFn,
       queryHash: queryHash,
       queryKey: queryKey,
-      staleTime: staleTime,
     },
     subscribe: (subscriber) => {
       query.subscribers.push(subscriber);
@@ -50,6 +49,7 @@ export function createQuery<T>({
               ...state,
               data: data,
               status: "success",
+              lastUpdated: Date.now(),
             }));
           } catch (error) {
             query.setState((state) => ({

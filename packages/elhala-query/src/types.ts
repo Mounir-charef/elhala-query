@@ -5,15 +5,17 @@ export type QueryStatus = "idle" | "loading" | "success" | "error";
 export type QueryOptions<T> = {
   queryKey: QueryKey;
   queryFn: ({ queryKey }: { queryKey: QueryKey }) => Promise<T>;
+};
+export type useQueryOptions<T> = QueryOptions<T> & {
   staleTime?: number;
 };
-
 export type QueryState<T> = {
   data: T | undefined;
   error: unknown;
   isLoading: boolean;
   isFetching: boolean;
   status: QueryStatus;
+  lastUpdated: number | undefined;
 };
 
 export type QuerySubcriber = {
@@ -36,4 +38,5 @@ export type QueryObserver<T> = {
   notify: () => void;
   getResults: () => QueryState<T>;
   subscribe: (callback: () => void) => () => void;
+  fetch: () => void;
 };
