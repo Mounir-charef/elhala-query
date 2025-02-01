@@ -8,7 +8,7 @@ export function createQueryObserver<T>(
   const query = client.getQuery(options);
   const observer: QueryObserver<T> = {
     notify: () => query.fetch(),
-    getResults: () => query.state.data,
+    getResults: () => query.state,
     subscribe: (callback) => {
       observer.notify = callback;
       const unsub = query.subscribe(observer);

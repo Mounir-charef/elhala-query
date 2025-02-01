@@ -1,9 +1,9 @@
 import { useEffect, useReducer, useRef } from "react";
 import { useElhalaClient } from "./client-provider";
-import { QueryOptions } from "./types";
+import { QueryOptions, QueryState } from "./types";
 import { createQueryObserver } from "./queryObserver";
 
-export function useQuery<T>(options: QueryOptions<T>): T | undefined {
+export function useQuery<T>(options: QueryOptions<T>): QueryState<T> {
   const client = useElhalaClient();
 
   const [renders, rerender] = useReducer((x: number) => x + 1, 0);

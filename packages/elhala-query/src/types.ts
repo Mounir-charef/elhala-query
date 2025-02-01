@@ -34,6 +34,6 @@ export type Query<T> = {
 
 export type QueryObserver<T> = {
   notify: () => void;
-  getResults: () => T | undefined;
+  getResults: () => QueryState<T>;
   subscribe: (callback: () => void) => () => void;
 };

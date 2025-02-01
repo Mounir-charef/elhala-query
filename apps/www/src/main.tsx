@@ -1,9 +1,14 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
+import { ElhalaClient, ElhalaProvider } from "elhala-query";
+
+const elhalaClient = new ElhalaClient();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    <ElhalaProvider client={elhalaClient}>
+      <App />
+    </ElhalaProvider>
   </StrictMode>
 );

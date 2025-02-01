@@ -1,9 +1,7 @@
-import { useState } from "react";
+import { useQuery } from "./useQuery";
+import { QueryOptions, QueryObserver } from "./types";
+import { ElhalaClient } from "./elhalaClient";
+import { useElhalaClient, ElhalaProvider } from "./client-provider";
 
-export const useQuery = () => {
-  const [query, _] = useState("INITAL_QUERY222");
-
-  return {
-    query,
-  };
-};
+export { ElhalaClient, useQuery, useElhalaClient, ElhalaProvider };
+export type { QueryOptions, QueryObserver };
