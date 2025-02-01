@@ -1,20 +1,34 @@
-/* 
-    This is the main client class for caching queries and providing a way to get query data of the store.
-    It is used to subscribe to the store and get the query data. (observer pattern)
-    It is used by the ElhalaProvider to provide the store to the app.
- */
+import { createQuery } from "./query";
+import { Query, QueryOptions } from "./types";
+
 export class ElhalaClient {
+  queries: Map<string, Query<any>>;
   constructor() {
-    // ...
+    this.queries = new Map();
   }
 
-  // This method is used to set the query data in the store.
-  setQueryData() {
-    // ...
+  getQuery<T>(options: QueryOptions<T>): Query<T> {
+    let queryHash = JSON.stringify(options.queryKey);
+
+    if (this.queries.has(queryHash)) {
+      return this.queries.get(queryHash) as Query<T>;
+    } else {
+      let query = createQuery(options);
+      this.queries.set(queryHash, query);
+
+      return query;
+    }
   }
 
-  // This method is used to get the query data from the store.
-  getQueryData() {
-    // ...
+  getQueryData<T>(options: QueryOptions<T>): T | undefined {
+    return this.getQuery(options).state.data;
+  }
+
+  setQueryData<T>(options: QueryOptions<T>, data: T) {
+    let query = this.getQuery(options);
+    query.setState((state) => ({
+      ...state,
+      data: data,
+    }));
   }
 }

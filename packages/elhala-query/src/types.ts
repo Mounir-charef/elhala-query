@@ -31,3 +31,9 @@ export type Query<T> = {
   setState: (updater: (state: QueryState<T>) => QueryState<T>) => void;
   fetch: () => void;
 };
+
+export type QueryObserver<T> = {
+  notify: () => void;
+  getResults: () => T | undefined;
+  subscribe: (callback: () => void) => () => void;
+};

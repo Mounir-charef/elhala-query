@@ -1,10 +1,10 @@
-import { ElhalaClient } from "./elhalaClient";
 import { Query, QueryOptions } from "./types";
 
-export function createQuery<T>(
-  client: ElhalaClient,
-  { queryFn, queryKey, staleTime }: QueryOptions<T>
-): Query<T> {
+export function createQuery<T>({
+  queryFn,
+  queryKey,
+  staleTime,
+}: QueryOptions<T>): Query<T> {
   let queryHash = JSON.stringify(queryKey);
 
   let query: Query<T> = {
