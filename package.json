@@ -1,5 +1,8 @@
 {
-	"dependencies": {
-		"@vitest/eslint-plugin": "^1.1.25"
-	}
+  "dependencies": {
+    "@vitest/eslint-plugin": "^1.1.25"
+  },
+  "scripts": {
+    "deploy-www": "pnpm --filter www run deploy"
+  }
 }
