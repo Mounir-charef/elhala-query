@@ -1,20 +1,28 @@
 import { useQuery } from "elhala-query";
 
 function App() {
-  const state = useQuery({
+  const { refetch, ...state } = useQuery({
     queryKey: ["hello"],
     queryFn: async () => {
-      console.log("fetching data");
       await new Promise((resolve) => setTimeout(resolve, 1000));
       return "world";
     },
     staleTime: 1000,
     cacheTime: 2000,
   });
-
+  if (state.error) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>{state.error.message}</p>
+        <button onClick={refetch}>Refetch</button>
+      </div>
+    );
+  }
   return (
     <div className="App">
-      {state.status === "loading" ? "Loading..." : state.data}
+      {JSON.stringify(state)}
+      <button onClick={refetch}>Refetch</button>
     </div>
   );
 }

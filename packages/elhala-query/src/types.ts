@@ -12,11 +12,12 @@ export type useQueryOptions<T> = QueryOptions<T> & {
 };
 export type QueryState<T> = {
   data: T | undefined;
-  error: unknown;
+  error?: Error;
   isLoading: boolean;
   isFetching: boolean;
   status: QueryStatus;
   lastUpdated: number | undefined;
+  refetch: () => void;
 };
 
 export type QuerySubcriber = {

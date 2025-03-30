@@ -23,7 +23,7 @@ export function createQueryObserver<T>(
       observer.notify = callback;
       const unsub = query.subscribe(observer);
 
-      // fetch the data immediately
+      // fetch the data immediately !!IMPORTANT!!
       observer.fetch();
 
       return unsub;
