@@ -1,10 +1,19 @@
+import { createMutation } from "./mutation";
 import { createQuery } from "./query";
-import { Query, QueryOptions } from "./types";
+import {
+  Query,
+  QueryOptions,
+  Mutation,
+  MutationOptions,
+  QueryKey,
+} from "./types";
 
 export class ElhalaClient {
   queries: Map<string, Query<any>>;
+  mutations: Map<string, Mutation<any>>;
   constructor() {
     this.queries = new Map();
+    this.mutations = new Map();
   }
 
   getQuery<T>(options: QueryOptions<T>): Query<T> {
@@ -34,5 +43,42 @@ export class ElhalaClient {
 
   removeQuery(query: Query<any>) {
     this.queries.delete(query.options.queryHash);
+  }
+
+  invalidateQueries({ queryKey }: { queryKey: QueryKey }) {
+    this.queries.forEach((query) => {
+      if (
+        queryKey.length === 0 ||
+        queryKey.some((key) => query.options.queryKey.includes(key))
+      ) {
+        query.setState((state) => ({
+          ...state,
+          isLoading: true,
+          isFetching: true,
+        }));
+        query.fetch();
+      }
+    });
+  }
+
+  clearQueriesCache() {
+    this.queries.clear();
+  }
+
+  getMutation<T>(options: MutationOptions<T>): Mutation<T> {
+    let mutationHash = JSON.stringify(options.mutationKey);
+
+    if (this.mutations.has(mutationHash)) {
+      return this.mutations.get(mutationHash) as Mutation<T>;
+    } else {
+      let mutation = createMutation(options);
+      this.mutations.set(mutationHash, mutation);
+
+      return mutation;
+    }
+  }
+
+  clearMutationsCache() {
+    this.mutations.clear();
   }
 }
