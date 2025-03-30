@@ -111,7 +111,7 @@ function App() {
         Built with 💻 by <span className="font-medium">Mounir</span>.{" "}
         <a
           rel="noopener noreferrer"
-          href="https://github.com/Mounir-charef/elhala-monorepo"
+          href="https://github.com/Mounir-charef/elhala-query"
           target="_blank"
           className="text-blue-500 hover:underline"
         >
