@@ -5,11 +5,31 @@ export function createQueryObserver<T>(
   client: ElhalaClient,
   { queryFn, queryKey, cacheTime, staleTime = 0 }: useQueryOptions<T>
 ): QueryObserver<T> {
-  // query options are the use query options but without staleTime
-
   const query = client.getQuery({ queryFn, queryKey, cacheTime });
+  let staleCheckTimer: ReturnType<typeof setTimeout> | null = null;
+
+  const setupStaleCheck = () => {
+    if (staleTime <= 0 || !query.state.lastUpdated) return;
+
+    if (staleCheckTimer) {
+      clearTimeout(staleCheckTimer);
+      staleCheckTimer = null;
+    }
+
+    const timeUntilStale = staleTime - (Date.now() - query.state.lastUpdated);
+
+    if (timeUntilStale > 0) {
+      staleCheckTimer = setTimeout(() => {
+        query.fetch();
+      }, timeUntilStale);
+    }
+  };
+
   const observer: QueryObserver<T> = {
-    notify: () => query.fetch(),
+    notify: () => {
+      setupStaleCheck();
+      return query.state;
+    },
     getResults: () => query.state,
     fetch: () => {
       if (
@@ -20,13 +40,26 @@ export function createQueryObserver<T>(
       }
     },
     subscribe: (callback) => {
-      observer.notify = callback;
+      observer.notify = () => {
+        setupStaleCheck();
+        callback();
+        return query.state;
+      };
+
       const unsub = query.subscribe(observer);
 
       // fetch the data immediately !!IMPORTANT!!
       observer.fetch();
 
-      return unsub;
+      setupStaleCheck();
+
+      return () => {
+        unsub();
+        if (staleCheckTimer) {
+          clearTimeout(staleCheckTimer);
+          staleCheckTimer = null;
+        }
+      };
     },
   };
   return observer;
