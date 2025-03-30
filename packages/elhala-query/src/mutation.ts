@@ -39,7 +39,6 @@ export function createMutation<T>({
       isSuccess: false,
       isError: false,
       status: "idle",
-      promise: undefined,
       mutate: async (variables) => {
         mutation.setState((state) => ({
           ...state,
@@ -75,6 +74,7 @@ export function createMutation<T>({
           mutation.setState((state) => ({
             ...state,
             isLoading: false,
+            status: "idle",
           }));
           mutation.options.onSettled?.();
         }

@@ -64,7 +64,6 @@ export type MutationState<T> = {
   isSuccess: boolean;
   isError: boolean;
   status: QueryStatus;
-  promise?: Promise<void>;
   mutate: (variables?: unknown) => Promise<void>;
 };
 
