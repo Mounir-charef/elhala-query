@@ -17,6 +17,7 @@ export type QueryState<T> = {
   error?: Error;
   isLoading: boolean;
   isFetching: boolean;
+  isError: boolean;
   status: QueryStatus;
   lastUpdated: number | undefined;
   refetch: () => void;

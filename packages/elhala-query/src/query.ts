@@ -16,6 +16,7 @@ export function createQuery<T>(
       error: undefined,
       isLoading: true,
       isFetching: true,
+      isError: false,
       status: "loading",
       lastUpdated: undefined,
       refetch: () => {
@@ -74,12 +75,14 @@ export function createQuery<T>(
               ...state,
               data: data,
               status: "success",
+              isError: false,
               lastUpdated: Date.now(),
             }));
           } catch (error) {
             query.setState((state) => ({
               ...state,
               error: error as Error,
+              isError: true,
               status: "error",
             }));
           } finally {
