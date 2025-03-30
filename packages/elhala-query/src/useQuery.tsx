@@ -1,22 +1,23 @@
-import { useEffect, useReducer, useRef } from "react";
+import { useSyncExternalStore, useRef, useCallback } from "react";
 import { useElhalaClient } from "./client-provider";
 import { createQueryObserver } from "./queryObserver";
-import { QueryState, useQueryOptions } from "./types";
+import { QueryObserver, QueryState, useQueryOptions } from "./types";
 
 export function useQuery<T>(options: useQueryOptions<T>): QueryState<T> {
   const client = useElhalaClient();
 
-  const [_, rerender] = useReducer((x: number) => x + 1, 0);
+  const observer = useRef<QueryObserver<T> | null>(null);
+  if (!observer.current) {
+    observer.current = createQueryObserver(client, options);
+  }
 
-  const observer = useRef(createQueryObserver(client, options));
-
-  useEffect(() => {
-    console.log("subscribing (should only happen once per component !!)");
-    if (!observer.current) {
-      return;
-    }
-    return observer.current.subscribe(rerender);
-  }, [observer]);
+  useSyncExternalStore(
+    useCallback((onStoreChange) => {
+      return observer.current!.subscribe(onStoreChange);
+    }, []),
+    () => observer.current?.getResults(),
+    () => observer.current?.getResults()
+  );
 
   return observer.current.getResults();
 }
