@@ -1,6 +1,8 @@
 export type QueryKey = ReadonlyArray<unknown>;
+export type MutationKey = ReadonlyArray<unknown>;
 
 export type QueryStatus = "idle" | "loading" | "success" | "error";
+export type MutationStatus = "idle" | "loading" | "success" | "error";
 
 export type QueryOptions<T> = {
   queryKey: QueryKey;
@@ -20,19 +22,19 @@ export type QueryState<T> = {
   refetch: () => void;
 };
 
-export type QuerySubcriber = {
+export type Subcriber = {
   notify: () => void;
 };
 
 export type Query<T> = {
-  subscribers: Array<QuerySubcriber>;
+  subscribers: Array<Subcriber>;
   state: QueryState<T>;
   options: QueryOptions<T> & {
     queryHash: string;
   };
   promise?: Promise<void>;
   gcTimeout?: ReturnType<typeof setTimeout>;
-  subscribe: (subscriber: QuerySubcriber) => () => void;
+  subscribe: (subscriber: Subcriber) => () => void;
   setState: (updater: (state: QueryState<T>) => QueryState<T>) => void;
   fetch: () => void;
   scheduleGC: () => void;
@@ -44,4 +46,40 @@ export type QueryObserver<T> = {
   getResults: () => QueryState<T>;
   subscribe: (callback: () => void) => () => void;
   fetch: () => void;
+};
+
+export type MutationOptions<T> = {
+  mutationFn: (variables?: unknown) => Promise<T>;
+  mutationKey?: MutationKey;
+  onSuccess?: (data: T) => void;
+  onError?: (error: Error) => void;
+  onSettled?: () => void;
+  onMutate?: () => void;
+};
+
+export type MutationState<T> = {
+  data: T | undefined;
+  error?: Error;
+  isLoading: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+  status: QueryStatus;
+  promise?: Promise<void>;
+  mutate: (variables?: unknown) => Promise<void>;
+};
+
+export type Mutation<T> = {
+  subscribers: Array<Subcriber>;
+  state: MutationState<T>;
+  options: MutationOptions<T> & {
+    mutationHash: string;
+  };
+  subscribe: (subscriber: Subcriber) => () => void;
+  setState: (updater: (state: MutationState<T>) => MutationState<T>) => void;
+};
+
+export type MutationObserver<T> = {
+  notify: () => void;
+  getResults: () => MutationState<T>;
+  subscribe: (callback: () => void) => () => void;
 };
