@@ -3,6 +3,7 @@
     "@vitest/eslint-plugin": "^1.1.25"
   },
   "scripts": {
-    "deploy-www": "pnpm --filter www run deploy"
+    "deploy-www": "pnpm --filter www run deploy",
+    "publish": "pnpm --filter elhala-query publish"
   }
 }

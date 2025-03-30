@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsup",
     "watch": "tsup --watch",
-    "publish": "pnpm build && pnpm publish --access public"
+    "publish": "pnpm build && npm publish --access public"
   },
   "dependencies": {
     "react": "^18.3.1",
