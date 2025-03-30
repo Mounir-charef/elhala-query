@@ -1,17 +1,36 @@
 {
   "name": "elhala-query",
   "version": "0.1.0",
-  "main": "dist/index.cjs",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup",
-    "watch": "tsup --watch"
+    "watch": "tsup --watch",
+    "publish": "pnpm build && pnpm publish --access public"
   },
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mounir-charef/elhala-query.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Mounir-charef/elhala-query/issues"
+  },
+  "homepage": "https://github.com/Mounir-charef/elhala-query#readme",
+  "license": "UNLICENSED",
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "@types/react": "^18.3.18",
