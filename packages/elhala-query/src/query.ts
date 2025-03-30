@@ -84,7 +84,11 @@ export function createQuery<T>(
             }));
           } finally {
             query.promise = undefined;
-            query.setState((state) => ({ ...state, isFetching: false }));
+            query.setState((state) => ({
+              ...state,
+              isFetching: false,
+              isLoading: false,
+            }));
           }
         })();
       }
