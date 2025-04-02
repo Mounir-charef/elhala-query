@@ -60,10 +60,7 @@ const { data, error, isLoading, isError, refetch } = useQuery(
 ### `useMutation`
 
 ```jsx
-const { mutate, isLoading, isError, error, reset } = useMutation(
-  mutationFn,
-  options
-);
+const { mutate, isLoading, isError, error } = useMutation(mutationFn, options);
 ```
 
 ## For Beginners
