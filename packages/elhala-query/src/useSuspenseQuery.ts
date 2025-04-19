@@ -22,7 +22,7 @@ export function useSuspenseQuery<T>(
     () => observer.current?.getResults()
   );
 
-  if (state?.status === "loading") {
+  if (state?.isFetching) {
     const promise = observer.current.fetchOptimistic();
     if (promise) throw promise;
     throw new Promise(() => {});
