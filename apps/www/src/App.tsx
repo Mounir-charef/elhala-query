@@ -1,4 +1,6 @@
 import { useQuery, useMutation, useElhalaClient } from "elhala-query";
+import { Suspense } from "react";
+import Child from "./Child";
 
 function App() {
   const client = useElhalaClient();
@@ -87,7 +89,10 @@ function App() {
             </button>
           </div>
         </section>
-
+        {/* Child Component */}
+        <Suspense fallback={<div>Loading...</div>}>
+          <Child />
+        </Suspense>
         {/* Mutation Panel */}
         <section className="bg-white rounded-2xl shadow-md p-6">
           <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">

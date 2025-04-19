@@ -61,6 +61,9 @@ export function createQueryObserver<T>(
         }
       };
     },
+    fetchOptimistic: () => {
+      return query.fetch();
+    },
   };
   return observer;
 }

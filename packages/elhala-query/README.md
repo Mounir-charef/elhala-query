@@ -1,35 +1,49 @@
 # elhala-query 📦
 
-A lightweight, educational implementation of React Query concepts.
+A lightweight, educational implementation of React Query concepts with Suspense support.
 
 > 🧠 "El Hala" (الحالة) means _"state"_ in Arabic.
 
 ## Educational Purpose
 
-**elhala-query** is a minimal, beginner-friendly clone of React Query, built **strictly for educational purposes**. This is a personal project designed to help developers understand how data fetching libraries like React Query work under the hood.
+**elhala-query** is a minimal, beginner-friendly clone of React Query, built **strictly for educational purposes**. This project demonstrates core data fetching concepts including Suspense integration and cache management.
 
-⚠️ **IMPORTANT**: This package is NOT intended for production use. It lacks many optimizations, edge case handling, and extensive testing required for production-ready software.
+⚠️ **IMPORTANT**: Not for production use. Missing production-grade optimizations and extensive testing.
 
 ## Keywords
 
-`react`, `query`, `data-fetching`, `state-management`, `educational`, `learning`, `clone`, `react-query`, `hooks`, `cache`, `tutorial`, `beginner-friendly`
+`react`, `query`, `suspense`, `data-fetching`, `state-management`, `error-boundaries`, `educational`, `react-query`, `hooks`, `cache`
 
 ## Learning Goals
 
-This project helps you understand:
+Learn through code:
 
-- How query caching mechanisms work
-- The implementation of data fetching hooks
-- State management patterns for asynchronous operations
-- The core concepts behind React Query without the complexity
+- Query caching mechanisms
+- Suspense integration patterns
+- Error Boundary integration
+- State management for async operations
+- Refetch/Stale-while-revalidate patterns
+- Core React Query concepts simplified
+
+## Features
+
+- Traditional loading/error states
+- Suspense mode support
+- Error Boundary integration
+- Automatic cache garbage collection
+- Stale-while-revalidate pattern
+- Manual refetching
+- Query deduplication
 
 ## Basic Usage
+
+### Traditional Loading States
 
 ```jsx
 import { useQuery } from "elhala-query";
 
 function UserProfile({ userId }) {
-  const { data, isLoading, error } = useQuery(["user", userId], () =>
+  const { data, isLoading, error, refetch } = useQuery(["user", userId], () =>
     fetch(`/api/users/${userId}`).then((res) => res.json())
   );
 
@@ -39,42 +53,83 @@ function UserProfile({ userId }) {
   return (
     <div>
       <h1>{data.name}</h1>
-      <p>{data.email}</p>
+      <button onClick={refetch}>Refresh</button>
     </div>
   );
 }
 ```
 
-## Core API
-
-### `useQuery`
+### Suspense Mode
 
 ```jsx
-const { data, error, isLoading, isError, refetch } = useQuery(
-  queryKey,
-  queryFn,
-  options
-);
+import { useSuspenseQuery } from "elhala-query";
+import { Suspense } from "react";
+import ErrorBoundary from "./ErrorBoundary";
+
+function Profile() {
+  const { data, refetch } = useSuspenseQuery(["profile"], () =>
+    fetch("/api/profile").then((res) => res.json())
+  );
+
+  return (
+    <div>
+      <h1>{data.name}</h1>
+      <button onClick={refetch}>
+        {data.isFetching ? "Refreshing..." : "Refresh"}
+      </button>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <ErrorBoundary fallback={<div>Error loading profile!</div>}>
+      <Suspense fallback={<div>Loading profile...</div>}>
+        <Profile />
+      </Suspense>
+    </ErrorBoundary>
+  );
+}
 ```
 
-### `useMutation`
+## Key Concepts Demonstrated
 
-```jsx
-const { mutate, isLoading, isError, error } = useMutation(mutationFn, options);
-```
+### **Suspense Integration**
 
-## For Beginners
+- Promise throwing/reconciliation
+- Suspense/Error Boundary coordination
+- Re-suspension on refetch/stale data
 
-If you're learning React and want to understand how data fetching libraries work:
+### **Cache Management**
 
-1. Read through the source code - it's intentionally simple and commented
-2. Try implementing your own features as learning exercises
-3. Compare with React Query to see how a production library handles similar concepts
+- Query deduplication
+- Stale-time configuration
+- Cache garbage collection
 
-## Alternatives for Production
+### **State Transitions**
 
-For production applications, consider using established libraries such as:
+- Loading/error/success states
+- Background refetch indicators
+- Optimistic updates pattern
+
+## For Learners
+
+**Recommended learning path:**
+
+1. Study the `createQuery` cache implementation
+2. Examine `useSuspenseQuery` Suspense integration
+3. Explore `QueryObserver` state management
+4. Implement a new feature (e.g., optimistic updates)
+5. Compare with React Query's production implementation
+
+## Production Alternatives
+
+While elhala-query demonstrates Suspense patterns, consider these for production:
 
 - [TanStack Query (React Query)](https://tanstack.com/query/)
 - [SWR](https://swr.vercel.app/)
 - [RTK Query](https://redux-toolkit.js.org/rtk-query/overview)
+
+## Contribution
+
+This project is maintained for educational purposes. Contributions through issues/pull requests are welcome for educational improvements.
