@@ -90,24 +90,9 @@ function App() {
           </div>
         </section>
         {/* Child Component */}
-        <section className="bg-white rounded-2xl shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">
-            👶 Child Component
-          </h2>
-          <p className="text-sm text-gray-600 mb-4">
-            This child component uses the query in suspense mode.
-          </p>
-          <Suspense fallback={<div>Loading...</div>}>
-            <div className="bg-gray-100 text-sm p-4 rounded-lg">
-              <p className="text-center">
-                <Child />
-              </p>
-            </div>
-          </Suspense>
-          <p className="text-sm text-gray-600 mt-4">
-            The child component will suspend until the query is resolved.
-          </p>
-        </section>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Child />
+        </Suspense>
         {/* Mutation Panel */}
         <section className="bg-white rounded-2xl shadow-md p-6">
           <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">
