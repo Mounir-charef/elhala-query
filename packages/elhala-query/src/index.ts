@@ -15,8 +15,16 @@ import {
 } from "./types";
 import { ElhalaClient } from "./elhalaClient";
 import { useElhalaClient, ElhalaProvider } from "./client-provider";
+import { useSuspenseQuery } from "./useSuspenseQuery";
 
-export { ElhalaClient, useQuery, useElhalaClient, ElhalaProvider, useMutation };
+export {
+  ElhalaClient,
+  useQuery,
+  useElhalaClient,
+  ElhalaProvider,
+  useMutation,
+  useSuspenseQuery,
+};
 export type {
   QueryOptions,
   QueryObserver,

@@ -95,6 +95,7 @@ export function createQuery<T>(
           }
         })();
       }
+      return query.promise;
     },
   };
 

@@ -23,6 +23,12 @@ export type QueryState<T> = {
   refetch: () => void;
 };
 
+export type SuspenseQueryState<T> = QueryState<T> & {
+  data: T;
+  status: Exclude<QueryStatus, "loading">;
+  error: undefined;
+};
+
 export type Subcriber = {
   notify: () => void;
 };
@@ -37,7 +43,7 @@ export type Query<T> = {
   gcTimeout?: ReturnType<typeof setTimeout>;
   subscribe: (subscriber: Subcriber) => () => void;
   setState: (updater: (state: QueryState<T>) => QueryState<T>) => void;
-  fetch: () => void;
+  fetch: () => Promise<void>;
   scheduleGC: () => void;
   unscheduleGC: () => void;
 };
@@ -47,6 +53,7 @@ export type QueryObserver<T> = {
   getResults: () => QueryState<T>;
   subscribe: (callback: () => void) => () => void;
   fetch: () => void;
+  fetchOptimistic: () => Promise<void>;
 };
 
 export type MutationOptions<T> = {
