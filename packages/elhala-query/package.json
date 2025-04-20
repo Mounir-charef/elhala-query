@@ -1,6 +1,6 @@
 {
   "name": "elhala-query",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "module": "dist/index.mjs",
   "keywords": [
     "react",
