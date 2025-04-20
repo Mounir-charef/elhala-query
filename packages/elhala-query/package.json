@@ -2,6 +2,17 @@
   "name": "elhala-query",
   "version": "0.2.0",
   "module": "dist/index.mjs",
+  "keywords": [
+    "react",
+    "react-query",
+    "data-fetching",
+    "hooks",
+    "server-state",
+    "cache",
+    "suspense",
+    "react-suspense",
+    "educational"
+  ],
   "scripts": {
     "build": "tsup",
     "watch": "tsup --watch",

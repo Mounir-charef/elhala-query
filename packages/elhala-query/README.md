@@ -92,6 +92,40 @@ function App() {
 }
 ```
 
+## Mutation API
+
+### `useMutation`
+
+Manage side-effects with full lifecycle tracking:
+
+```jsx
+import { useMutation } from "elhala-query";
+
+function AddTodo() {
+  const { mutate, isLoading, isError, error } = useMutation((newTodo) =>
+    fetch("/api/todos", {
+      method: "POST",
+      body: JSON.stringify(newTodo),
+    })
+  );
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    mutate({ title: e.target.title.value });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input name="title" />
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? "Adding..." : "Add Todo"}
+      </button>
+      {isError && <div>Error: {error.message}</div>}
+    </form>
+  );
+}
+```
+
 ## Key Concepts Demonstrated
 
 ### **Suspense Integration**
