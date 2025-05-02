@@ -74,9 +74,7 @@ function Profile() {
   return (
     <div>
       <h1>{data.name}</h1>
-      <button onClick={refetch}>
-        {data.isFetching ? "Refreshing..." : "Refresh"}
-      </button>
+      <button onClick={refetch}>Refresh</button>
     </div>
   );
 }

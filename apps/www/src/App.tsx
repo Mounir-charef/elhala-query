@@ -22,7 +22,7 @@ function App() {
       return "world";
     },
     onSuccess: (data) => {
-      client.invalidateQueries({ queryKey: ["hello"] });
+      client.invalidateQueries({ queryKey: ["hello", "suspense-query"] });
       console.log("✅ Success:", data);
     },
     onError: (error) => {
