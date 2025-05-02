@@ -16,7 +16,7 @@
   "scripts": {
     "build": "tsup",
     "watch": "tsup --watch",
-    "publish": "pnpm build && npm publish --access public"
+    "publish-package": "pnpm build && npm publish --access public"
   },
   "dependencies": {
     "react": "^18.3.1",
